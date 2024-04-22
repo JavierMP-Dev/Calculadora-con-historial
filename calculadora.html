@@ -6,6 +6,80 @@
     <title>Calculadora</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
+<style>
+    .calculator {
+    max-width: 300px;
+    margin: 50px auto;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#display {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 24px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
+}
+
+button {
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #ddd;
+}
+#red{
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #fa0000;
+    cursor: pointer;
+}
+
+#red:hover {
+    background-color: #f35454;
+}
+#green{
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #41ff07;
+    cursor: pointer;
+}
+
+#green:hover {
+    background-color: #6df743;
+}
+
+.yellow{
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #ffc507;
+    cursor: pointer;
+}
+
+.yellow:hover{
+    background-color: #fad660;
+}
+
+.history {
+    margin-top: 20px;
+    font-size: 14px;
+}
+</style>
+
 <body>
     <div class="calculator">
         <input type="text" id="display" readonly>
@@ -13,21 +87,61 @@
             <button onclick="appendToDisplay('1')">1</button>
             <button onclick="appendToDisplay('2')">2</button>
             <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('+')">+</button>
+            <button class="yellow" onclick="appendToDisplay('+')">+</button>
             <button onclick="appendToDisplay('4')">4</button>
             <button onclick="appendToDisplay('5')">5</button>
             <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="appendToDisplay('-')">-</button>
+            <button class="yellow" onclick="appendToDisplay('-')">-</button>
             <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
             <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('*')">*</button>
+            <button class="yellow" onclick="appendToDisplay('*')">*</button>
             <button onclick="appendToDisplay('0')">0</button>
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="calculate()">=</button>
-            <button onclick="appendToDisplay('/')">/</button>
+            <button id="red"  onclick="clearDisplay()">C</button>
+            <button id="green" onclick="calculate()">=</button>
+            <button class="yellow" onclick="appendToDisplay('/')">/</button>
         </div>
+        <div class="history" id="history"></div> <!-- Historial de operaciones -->
     </div>
-    <script src="script.js"></script>
+    <script src="calcu.js"></script>
+    <script>
+        let operationHistory = [];
+
+        function appendNumber(number) {
+            const resultField = document.getElementById('display');
+            resultField.value += number;
+        }
+
+        function appendToDisplay(char) {
+            const resultField = document.getElementById('display');
+            resultField.value += char;
+        }
+
+        function clearDisplay() {
+            const resultField = document.getElementById('display');
+            resultField.value = '';
+        }
+
+        function calculate() {
+            const resultField = document.getElementById('display');
+            const result = eval(resultField.value);
+            resultField.value = result;
+
+            // Guardar operación en el historial
+            operationHistory.push(resultField.value);
+            displayHistory();
+        }
+
+        function displayHistory() {
+            const historyElement = document.getElementById('history');
+            historyElement.innerHTML = '';
+
+            operationHistory.forEach((operation, index) => {
+                const operationItem = document.createElement('div');
+                operationItem.textContent = `Operación ${index + 1}: ${operation}`;
+                historyElement.appendChild(operationItem);
+            });
+        }
+    </script>
 </body>
 </html>
